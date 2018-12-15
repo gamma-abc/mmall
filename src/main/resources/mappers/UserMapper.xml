@@ -151,14 +151,14 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="checkUsername" parameterType="string" resultType="int">
-    select count (1) from mmall_user
-    where username=#{username}
+  <select id="checkUsername" resultType="int" parameterType="string" >
+    select count(1) from mmall_user
+    where username = #{username}
   </select>
 
   <select id="selectLonin" resultMap="BaseResultMap" parameterType="map">
     select
-    include refid="Base_Column_List" />
+    <include refid="Base_Column_List" />
     from mmall_user
     where username=#{username}and password=#{password}
   </select>
