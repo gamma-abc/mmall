@@ -21,4 +21,6 @@ public interface UserMapper {
     int checkEmail(String email);
 
     User selectLonin(@Param("username") String username,@Param("password") String password);
+    
+    User
 }
