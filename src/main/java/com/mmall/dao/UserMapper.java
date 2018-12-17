@@ -22,5 +22,5 @@ public interface UserMapper {
 
     User selectLonin(@Param("username") String username,@Param("password") String password);
     
-    int CheckQuestion();
+    int CheckQuestion();：
 }
