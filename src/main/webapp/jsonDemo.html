@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
+<img src="https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo_top_ca79a146.png" style="max-width:100%;"/>
+</body>
+<script type="text/javascript">
+    var jsonData=[{
+            "tag": "p",
+            "attrs": [],
+            "children": [
+                "欢迎使用 ",
+                {
+                    "tag": "b",
+                    "attrs": [],
+                    "children": [
+                        "wangEditor"
+                    ]
+                },
+                " 富文本编辑器"
+            ]
+        },
+        {
+            "tag": "img",
+            "attrs": [
+                {
+                    "name": "src",
+                    "value": "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo_top_ca79a146.png"
+                },
+                {
+                    "name": "style",
+                    "value": "max-width:100%;"
+                }
+            ],
+            "children": []
+        },
+        {
+            "tag": "p",
+            "attrs": [],
+            "children": [
+                {
+                    "tag": "br",
+                    "attrs": [],
+                    "children": []
+                }
+            ]
+        }
+    ]
+    var lab="<"
+    console.log("<"+jsonData[0].tag+">"+jsonData[0].children);
+</script>
+</html>
