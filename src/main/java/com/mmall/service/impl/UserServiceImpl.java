@@ -185,7 +185,7 @@ public class UserServiceImpl implements IUserService {
      * @return
      */
     @Override
-    public ServerResponse<User> updateInfomation(User user) {
+    public ServerResponse<User> updateInformation(User user) {
         int checkEmailResult=userMapper.checkEmailByUserId(user.getEmail(),user.getId());
         if (checkEmailResult > 0) {
             return ServerResponse.createByErrorMessage("Email已存在，请更换Email");
