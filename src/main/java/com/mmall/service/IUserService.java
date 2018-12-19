@@ -15,4 +15,6 @@ public interface IUserService {
     ServerResponse<String> restPassword(User user, String oldPassword, String newPassword);
 
     ServerResponse<User> updateInformation(User user);
+
+    ServerResponse<User> getInformation(Integer id);
 }

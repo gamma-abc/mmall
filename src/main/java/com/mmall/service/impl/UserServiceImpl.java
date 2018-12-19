@@ -113,7 +113,7 @@ public class UserServiceImpl implements IUserService {
             //说明问题和答案是这个用户
             //创建token
             String forgetTocen= UUID.randomUUID().toString();
-            TokenCache.setKey("token_"+username,forgetTocen);
+            TokenCache.setKey(TokenCache.TOKEN_PREFIX+username,forgetTocen);
             return ServerResponse.createBySuccess(forgetTocen);
         }else {
             return ServerResponse.createByErrorMessage("找回密码问题错误");
@@ -121,9 +121,10 @@ public class UserServiceImpl implements IUserService {
     }
     /**
      * 1:校验用户名是否存在
+     * 2：验证客户端传来的touken是否为空
      * 2:通过用户名获取当前用户的token
-     * 3:判断当前token是否为空，为空则用户登录失效
-     * 4:当前获取的token和客户端的对比，使用StringUnit.equals();方法比较
+     * 3:判断当前token是否为空，为空则该用户登录的登录touken已经过期
+     * 4:当前获取的token和客户端传过来的touken进行对比，使用StringUnit.equals();方法比较
      * 5:当比较相等时，在if中调用更新密码的方法
      * @param username
      * @param newPassword
@@ -132,14 +133,17 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public ServerResponse<String> forgetRestPassword(String username, String newPassword, String forgetToken) {
-        ServerResponse validusername=this.checkValid(username,Const.USERNAEM);
+        ServerResponse validusername=this.checkValid(username,Const.USERNAEM);  //判断用户是否存在
         if (validusername.isSuccess()){
             return ServerResponse.createByErrorMessage("用户名不存在");
         }
+        if (StringUtils.isBlank(forgetToken)) {
+            return ServerResponse.createByErrorMessage("touken需要被传递");      //判断客户端传过来的touken是否为空
+        }
         String token=TokenCache.getKey(TokenCache.TOKEN_PREFIX+username);
         if(StringUtils.isBlank(token)){
-            return ServerResponse.createByErrorMessage("token已失效");
-        }
+            return ServerResponse.createByErrorMessage("token已经过期");          //判断工具类生成的touken是否为空
+        }                                                                    // 为空则说明该用户的touken已经过期
         if (StringUtils.equals(token,forgetToken)){
             String MD5NewPassword=MD5Util.MD5EncodeUtf8(newPassword);
             int result=userMapper.updatePasswordByUsername(username,MD5NewPassword);
@@ -201,5 +205,22 @@ public class UserServiceImpl implements IUserService {
             return ServerResponse.createBySuccessMessage("更新用户信息成功");
         }
         return ServerResponse.createByErrorMessage("更新用户信息失败");
+    }
+
+    /**
+     * 获取当前用户信息
+     * 1：通过userId从数据库中获取用户信息赋值给User对象
+     * 2：获取到用户信息后将密码设置为空，之后将user对象返回给Controller层
+     * @param id
+     * @return
+     */
+    @Override
+    public ServerResponse<User> getInformation(Integer id) {
+        User user = userMapper.selectByPrimaryKey(id);
+        if (null == user) {
+            return ServerResponse.createByErrorMessage("找不到当前用户的信息");
+        }
+        user.setPassword(StringUtils.EMPTY);
+        return ServerResponse.createBySuccess(user);
     }
 }

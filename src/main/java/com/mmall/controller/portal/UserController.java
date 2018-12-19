@@ -7,10 +7,9 @@ import com.mmall.pojo.User;
 import com.mmall.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -36,12 +35,24 @@ public class UserController {
         }
         return response;
     }
+
+    /**
+     * 退出登录
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "logout.do",method = RequestMethod.POST)
      @ResponseBody
     public ServerResponse<String> logout(HttpSession session){
         session.removeAttribute(Const.CURRENT_USER);
         return ServerResponse.createBySuccess();
     }
+
+    /**
+     * 注册新用户
+     * @param user
+     * @return
+     */
     @RequestMapping(value = "register.do" ,method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<String> register(User user){
@@ -97,7 +108,7 @@ public class UserController {
     }
 
     /**
-     * 重置密码
+     * 通过密码问题重置密码
      * @param username
      * @param newPassword
      * @param forgetToken
@@ -126,6 +137,13 @@ public class UserController {
         }
         return iUserService.restPassword(user,OldPassword,NewPassword);
     }
+
+    /**
+     * 修改，更新个人信息
+     * @param session
+     * @param user
+     * @return
+     */
     @RequestMapping(value = "updateinfomation.do",method = RequestMethod.POST)
     @ResponseBody
     public ServerResponse<User> updateInfomation(HttpSession session,User user){
@@ -141,6 +159,21 @@ public class UserController {
             session.setAttribute(Const.CURRENT_USER,serverResponse.getData());
         }
         return serverResponse;
+    }
+    @RequestMapping(value = "getinformation.do",method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<User> getInformation(HttpSession session){
+        User currentUser=(User)session.getAttribute(Const.CURRENT_USER);
+        if (currentUser == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        return iUserService.getInformation(currentUser.getId());
+    }
+    @RequestMapping(value = "hello.do",method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse<String> sayHello(HttpSession session){
+
+        return ServerResponse.createBySuccess("hello");
     }
 
 }
