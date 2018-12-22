@@ -4,31 +4,47 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import java.io.Serializable;
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class ServerResponseByFile<T> implements Serializable {
-    private int errno;
-    private T[] data;
+public class ServerResponseByFile implements Serializable {
+    private Integer errno;
+    private String[] data;
 
     public int getErrno() {
         return errno;
     }
 
-    public T[] getData() {
+    public void setErrno(Integer errno) {
+        this.errno = errno;
+    }
+
+    public String[] getData() {
         return data;
     }
 
-    public ServerResponseByFile(int errno, T[] data) {
+    public void setData(String[] data) {
+        this.data = data;
+    }
+
+    public ServerResponseByFile() {
+        super();
+    }
+
+    public ServerResponseByFile(String[] data) {
+        this.data = data;
+    }
+
+    public ServerResponseByFile(Integer errno, String[] data) {
         this.errno = errno;
         this.data = data;
     }
 
-    public ServerResponseByFile(int errno) {
+    public ServerResponseByFile(Integer errno) {
         this.errno = errno;
     }
 
-    public static <T> ServerResponseByFile<T> createBySuccess( T[] data){
-        return new ServerResponseByFile<>(0,data);
+    public static  ServerResponseByFile createBySuccess( String[] data){
+        return new ServerResponseByFile(0,data);
     }
-    public static <T>ServerResponseByFile<T> createByErrno(){
-        return new ServerResponseByFile<>(1);
+    public static ServerResponseByFile createByErrno(){
+        return new ServerResponseByFile(1);
     }
 }

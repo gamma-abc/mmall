@@ -1,6 +1,7 @@
 package com.mmall.controller.portal;
 
 import com.mmall.common.Const;
+import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -28,11 +30,12 @@ public class UserController {
      */
     @RequestMapping(value = "login.do",method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse<User> login(String username, String password, HttpSession sesson){
+    public ServerResponse<User> login(String username, String password, HttpSession sesson, HttpServletRequest request){
         ServerResponse<User> response= iUserService.login(username,password);
         if (response.isSuccess()){
             sesson.setAttribute(Const.CURRENT_USER,response.getData());
         }
+
         return response;
     }
 
@@ -165,7 +168,7 @@ public class UserController {
     public ServerResponse<User> getInformation(HttpSession session){
         User currentUser=(User)session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorMessage("用户未登录");
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(),"用户未登录");
         }
         return iUserService.getInformation(currentUser.getId());
     }
