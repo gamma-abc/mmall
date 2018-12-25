@@ -1,5 +1,6 @@
 package com.mmall.util;
 
+import com.mmall.pojo.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,17 @@ public class PropertiesUtil {
         return value.trim();
     }
 
+    public static String getproperitys(String key){
+        // 1:通过key获取properties中的value
+        // 2:trim用于去除两边的空格
+        String value=props.getProperty(key);
+        // 判断value是否为空，为空的时候如何操作
+        if (StringUtils.isBlank(value)){
 
+            return null;
+        }
+        // value值要去除前后的空格
+        return value.trim();
+    }
 
 }
