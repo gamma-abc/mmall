@@ -3,6 +3,7 @@ package com.mmall.service.impl;
 import com.google.common.collect.Lists;
 import com.mmall.service.IFileService;
 import com.mmall.util.FTPUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,8 @@ public class FileServiceImpl implements IFileService {
         //substring截取字符串
         // lastIndexOf从行末开始匹配字符串
         // 获取拓展名
-        String fileExtensionName=fileName.substring(fileName.lastIndexOf(".")+1);
+        // String fileExtensionName=fileName.substring(fileName.lastIndexOf(".")+1);
+        String fileExtensionName=StringUtils.substringAfterLast(fileName,".");
         // 拼接图片在数据库中的文件名
         String uploadFileName= UUID.randomUUID().toString()+"."+fileExtensionName;
         // 打印日志信息
