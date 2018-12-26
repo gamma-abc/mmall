@@ -3,6 +3,7 @@ package com.mmall.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
+import com.mmall.common.Const;
 import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.dao.CategoryMapper;
@@ -207,5 +208,49 @@ public class ProductServiceImpl implements IProductService {
         PageInfo pageInfo=new PageInfo(productList);
         pageInfo.setList(productListVoList);
         return ServerResponse.createBySuccess(pageInfo);
+    }
+
+    /**
+     * 前台商品详情页
+     * 1:判断从后台查询的商品是否为空
+     * @param productId
+     * @return
+     */
+    @Override
+    public ServerResponse<ProductDetailVo> getProductDetail(Integer productId) {
+        Product product=productMapper.selectByPrimaryKey(productId);
+        if (product==null){
+            return ServerResponse.createByErrorMessage("商品不存在或已删除");
+        }
+        ProductDetailVo productDetailVo=assemblageProductDetailVo(product);
+        if (productDetailVo.getStatus() == Const.productStatusEnum.ON_SALE.getCode()) {
+            return ServerResponse.createByErrorMessage("商品已下架");
+        }
+        return ServerResponse.createBySuccess(productDetailVo);
+    }
+
+    /**
+     * 通过关键字或分类ID查询商品信息
+     * @param keyWord
+     * @param categoryId
+     * @param pageNum
+     * @param pageSize
+     * @param orderBy
+     * @return
+     */
+    @Override
+    public ServerResponse<PageInfo> getProductByKeywordAndCategoryId(String keyWord, Integer categoryId, int pageNum, int pageSize, String orderBy) {
+        // 1：判断是否存在keyword和categoryId
+        if (StringUtils.isEmpty(keyWord) && categoryId == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),"参数错误");
+        }
+        // 2:从数据库中查询是否存在该分类id
+        if (categoryId != null) {
+            Category category=categoryMapper.selectByPrimaryKey(categoryId);
+            if (category == null) {
+
+            }
+        }
+        return null;
     }
 }
