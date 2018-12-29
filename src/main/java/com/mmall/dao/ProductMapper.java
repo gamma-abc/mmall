@@ -19,5 +19,8 @@ public interface ProductMapper {
     int updateByPrimaryKey(Product record);
 
     List<Product> selectList();
+
     List<Product> selectByNameAndProductId(@Param("productName") String productName,@Param("productId") Integer productId);
+    // 前端通过关键字和分类id搜索
+    List<Product> selectByNameAndCategoryIds(@Param("keyWord") String keyWord, @Param("categoryIdList") List<Integer> categoryIdList);
 }

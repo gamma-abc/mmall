@@ -151,7 +151,7 @@ public class ProductManageController {
      */
     @RequestMapping("upload.do")
     @ResponseBody
-    public ServerResponse upload(HttpSession session,MultipartFile multipartFile, HttpServletRequest request){
+    public ServerResponse upload(HttpSession session,@RequestParam(value = "upload_file",required = false) MultipartFile multipartFile, HttpServletRequest request){
         User user=(User)session.getAttribute(Const.CURRENT_USER);
         // 1：判断用户是否登录
         if (user == null) {
@@ -162,6 +162,9 @@ public class ProductManageController {
             // 1:获取当前项目路径
             String realPath=request.getSession().getServletContext().getRealPath("upload");
             // 2:调用Service层存储图片,返回的是存储在服务器上的文件名
+            if (realPath == null||multipartFile==null) {
+                return ServerResponse.createBySuccess("路径："+realPath+"文件名："+multipartFile);
+            }
             String targetFileName=iFileService.upload(multipartFile,realPath);
             // 3:通过配置文件的ftp服务器前缀+文件名组成外部可访问的URL
             String url= PropertiesUtil.getProperty("ftp.server.http.prefix")+targetFileName;

@@ -1,9 +1,17 @@
 package com.mmall.common;
 
+import com.google.common.collect.Sets;
+
+import java.util.Set;
+
 public class Const {
     public static final String CURRENT_USER="current_User";
     public static final String EMALL="email";
     public static final String USERNAEM="username";
+
+    public interface ProductListOrderBy{
+        Set PRICE_ASC_DESC= Sets.newHashSet("price_asc","price_desc");
+    }
 
     /**
      * 用   户  0
