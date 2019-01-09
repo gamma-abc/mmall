@@ -9,6 +9,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class test_main {
@@ -24,9 +26,6 @@ public class test_main {
         String keyword = "  d";
         System.out.println("判断"+(StringUtils.isEmpty(keyword) ? null : keyword));
         System.out.println("-------------------------------------");
-        IUser target=new UserImpl();
-        IUser userProxy=new UserProxy(target);
-        userProxy.say();
     }
     @Test
     public void dynamic(){
@@ -42,9 +41,15 @@ public class test_main {
         SqlSession sqlSession=sqlSessionFactory.openSession();
     }
     @Test
-    public void whenCreateEmptyOptional_thenNull(){
-        Optional<OptionalTest> optionalTest=Optional.empty();
-        optionalTest.get();
+    public void splitStringToList(){
+        String id="11,33,aa,55,88,77";
+        String[]arr=id.split(",");
+        List<String> stringList=new ArrayList<>();
+        for (String s : arr) {
+            stringList.add(s+"1");
+        }
+        System.out.println(stringList);
+
     }
 
 
