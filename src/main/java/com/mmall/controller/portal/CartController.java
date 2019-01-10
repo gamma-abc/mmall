@@ -129,6 +129,7 @@ public class CartController {
     public ServerResponse<Integer> getCartProductCount(HttpSession session){
         User user =(User)session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
+            //如果用户未登录，不能返回错误信息，将购物车数量置为0
             return ServerResponse.createBySuccessMessage("0");
         }
         return iCartService.getCartProductCount(user.getId());

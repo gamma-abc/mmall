@@ -195,6 +195,19 @@
             </if>
         </where>
     </select>
+    <select id="productSearchByNameAndId" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from mmall_product
+        <where>
+            <if test="productName != null">
+                and name like #{productName}
+            </if>
+            <if test="productId">
+                and id=#{productId}
+            </if>
+        </where>
+    </select>
     <select id="selectByNameAndCategoryIds" resultMap="BaseResultMap" parameterType="map">
         select
         <include refid="Base_Column_List"/>
@@ -210,4 +223,5 @@
             </foreach>
         </if>
     </select>
+
 </mapper>

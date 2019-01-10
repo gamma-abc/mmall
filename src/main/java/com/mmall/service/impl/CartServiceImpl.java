@@ -203,6 +203,11 @@ public class CartServiceImpl implements ICartService {
         return this.list(userId);
     }
 
+    /**
+     * 显示购物车产品数量
+     * @param userId
+     * @return
+     */
     @Override
     public ServerResponse<Integer> getCartProductCount(Integer userId) {
         if (userId == null) {
